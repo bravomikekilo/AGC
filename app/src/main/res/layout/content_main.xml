@@ -8,16 +8,14 @@
     tools:context="cn.edu.buaa.baomingkun.agc.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <EditText
-        android:id="@+id/terminal"
-        android:layout_width="333dp"
-        android:layout_height="368dp"
+    <cn.edu.buaa.baomingkun.agc.ChartView
+        android:id="@+id/chartView"
+        android:layout_width="352dp"
+        android:layout_height="447dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

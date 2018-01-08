@@ -199,7 +199,8 @@ class MainActivity : AppCompatActivity() {
             for(i in split.dropLast(1)){
                 try {
                     val v = Integer.parseInt(i)
-                    terminal.append(v.toString() + "|")
+                    Log.i(ACTIVITY_TAG, "parsed signal $v")
+                    chartView.addValue(v)
                 } catch (e: NumberFormatException) {
                     continue
                 }
