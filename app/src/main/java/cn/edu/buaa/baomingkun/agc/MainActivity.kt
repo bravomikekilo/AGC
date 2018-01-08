@@ -5,10 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.*
-import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
-import android.os.Messenger
+import android.os.*
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -43,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             if(!mAdapter.isDiscovering && connectedDevice == null) {
                 menu = null
                 devices.clear()
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "start scanning bluetooth device", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
                 val ret = mAdapter.startDiscovery()
                 Log.i(ACTIVITY_TAG, "scan begin: $ret")
@@ -77,12 +74,16 @@ class MainActivity : AppCompatActivity() {
 
     val devices: ArrayList<BluetoothDevice> = arrayListOf()
 
+    /*
     private val handler: Handler = Handler{ msg ->
         Log.i(ACTIVITY_TAG, "receive message $msg")
         val content = msg.obj as String
         terminal.append(content.toString().trim())
         true
     }
+    */
+
+    private val handler: Handler = signalHandler()
 
     private val messenger: Messenger = Messenger(handler)
     private var binder: SocketService.LocalBinder? = null
@@ -182,4 +183,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    inner class signalHandler: Handler(){
+
+        var remain: String = "";
+        override fun handleMessage(msg: Message?) {
+            if(msg == null) return
+            val rawMsg = msg.obj as String
+            if(!rawMsg.contains("|value,")) {
+                remain += rawMsg
+                return
+            }
+            val content = remain + rawMsg
+            val split = content.split("|value,")
+            remain = split.last()
+            for(i in split.dropLast(1)){
+                try {
+                    val v = Integer.parseInt(i)
+                    terminal.append(v.toString() + "|")
+                } catch (e: NumberFormatException) {
+                    continue
+                }
+            }
+        }
+    }
 }
+
