@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
             if(connectedDevice != null){
                 binder?.closeSocket(connectedDevice!!)
                 connectedDevice = null
+                Snackbar.make(view, "shutdown bluetooth socket, releasing connection",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show()
             }
 
         }
@@ -73,15 +75,6 @@ class MainActivity : AppCompatActivity() {
     var menu: ContextMenu? = null
 
     val devices: ArrayList<BluetoothDevice> = arrayListOf()
-
-    /*
-    private val handler: Handler = Handler{ msg ->
-        Log.i(ACTIVITY_TAG, "receive message $msg")
-        val content = msg.obj as String
-        terminal.append(content.toString().trim())
-        true
-    }
-    */
 
     private val handler: Handler = signalHandler()
 
@@ -115,7 +108,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } else if(action == BluetoothAdapter.ACTION_DISCOVERY_FINISHED){
-                Snackbar.make(fab, "bluetooth scan finish", Snackbar.LENGTH_LONG)
+                Snackbar.make(fab, "bluetooth scan finish", Snackbar.LENGTH_LONG).
+                        setAction("Action", null).show()
                 fab.isClickable = true
                 Log.i(ACTIVITY_TAG, "device search finished")
             }
